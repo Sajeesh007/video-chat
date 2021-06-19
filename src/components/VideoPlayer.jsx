@@ -3,27 +3,9 @@ import { Grid, Typography, Paper, makeStyles } from '@material-ui/core';
 import * as tf from "@tensorflow/tfjs";
 import { SocketContext } from '../Context';
 import {drawRect} from "./utilities"; 
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 const useStyles = makeStyles((theme) => ({
-  /*video: {
-    display: 'flex',
-    width: 640,
-    height: 480,
-    zindex: 9,
-    [theme.breakpoints.down('xs')]: {
-      width: 300,
-    },
-  },
-  canvas: {
-    display: 'flex',
-    width: 640,
-    height: 480,
-    zindex: 8,
-    textAlign: "center",
-    [theme.breakpoints.down('xs')]: {
-      width: 300,
-    },
-  },*/
   gridContainer: {
     justifyContent: 'center',
     [theme.breakpoints.down('xs')]: {
@@ -53,6 +35,7 @@ const VideoPlayer = () => {
     //  Loop and detect hands
     setInterval(() => {
       detect(net);
+      
     }, 16.7);
   }
   const detect = async (net) => {
@@ -65,8 +48,8 @@ const VideoPlayer = () => {
       const video = userVideo.current;
       const videoWidth = userVideo.current.videoWidth
       const videoHeight = userVideo.current.videoHeight
-
-      // Set video width
+      
+      // Set video widt
       userVideo.current.width = videoWidth;
       userVideo.current.height = videoHeight;
 
@@ -81,7 +64,6 @@ const VideoPlayer = () => {
       const casted = resized.cast('int32')
       const expanded = casted.expandDims(0)
       const obj = await net.executeAsync(expanded)
-      console.log(obj)
 
       const boxes = await obj[1].array()
       const classes = await obj[2].array()
@@ -99,60 +81,146 @@ const VideoPlayer = () => {
       tf.dispose(casted)
       tf.dispose(expanded)
       tf.dispose(obj)
-
+      
     }
   };
 
-  useEffect(()=>{runCoco()}, []);
+  useEffect(()=>{
+    runCoco()
+    SpeechRecognition.startListening({ continuous: 'true',language: 'en-IN'})
+  }, []);
 
-  return (
+  console.log(myVideo)
+    const {
+      startListening,
+      stopListening,
+      transcript,
+      listening,
+      browserSupportsSpeechRecognition,
+    } = useSpeechRecognition();
+    
+
+  return(
     <Grid container className={classStyle.gridContainer}>
-      {stream && (
+      
         <Paper className={classStyle.paper}>
           <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>{name || 'Name'}</Typography>
-            <video playsInline muted ref={myVideo} autoPlay 
-            style={{
-              display:'flex',
-              textAlign: "center",
-              zindex: 9,
-              width: 640,
-              height: 480,
-            }}
-            />
-          </Grid>
-        </Paper>
-      )}
-      {callAccepted && !callEnded && (
-        <Paper className={classStyle.paper}>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom>{call.name || 'Name'}</Typography>
+          {(callAccepted && !callEnded ) ? (
             <div>
-            <video playsInline ref={userVideo} autoPlay 
-            style={{
-              display:'flex',
-              position: "absolute",
-              textAlign: "center",
-              zIndex: 9,
-              width: 640,
-              height: 480,
-            }}
-            />
-            <canvas ref={canvasRef}
-            style={{
-              position: "absolute",
-              textAlign: "center",
-              zIndex: 10,
-              //width: 640,
-              //height: 480,
-            }}
-            />
-            </div>
+              {console.log("hi")}
+              <Typography variant="h5" gutterBottom>{call.name || 'Name'}</Typography>
+              <div>
+              <button
+                onClick={startListening}
+                >start
+              </button>
+                {console.log(listening)}
+                <video playsInline muted ref={userVideo} autoPlay 
+                  style={{
+                    display:'flex',
+                    position: "relative",
+                    textAlign: "center",
+                    zIndex: 9,
+                    width: 640,
+                    height: 480,
+                    right:'100 px'
+                  }}
+                >
+                  
+                </video>
+                <p style={{backgroundColor:'#92a8d1'}}>
+                  {'>'}{transcript}{console.log({transcript})}
+                  </p>
+                <canvas ref={canvasRef}
+                  style={{
+                    position: 'absolute',
+                    textAlign: "center",
+                    zIndex: 10,
+                    right:'10px',
+                    bottom :'10px'
+                  }}
+                />
+              </div>
+            </div>) : (
+            <div>
+              <Typography variant="h5" gutterBottom>{name || 'Name'}</Typography>
+              <button
+                onClick={startListening}
+                >start
+              </button>
+                {console.log(listening)}
+                  <video playsInline muted ref={myVideo} autoPlay 
+                    style={{
+                      display:'flex',
+                      position:'relative',
+                      textAlign: "center",
+                      zindex: 9,
+                      width: 640,
+                      height: 480,
+                    }}
+                  >
+                  </video>
+                  <p style={{backgroundColor:'#92a8d1'}}>
+                  {'>'}{transcript}{console.log({transcript})}
+                  </p>
+            </div>)}
           </Grid>
         </Paper>
-      )}
+      
+
     </Grid>
-  );
-};
+  )
+
+  // return (
+  //   <Grid container className={classStyle.gridContainer}>
+  //     {stream && (
+  //       <Paper className={classStyle.paper}>
+  //         <Grid item xs={12} md={6} style={{postion:'relative'}}>
+  //           <Typography variant="h5" gutterBottom>{name || 'Name'}</Typography>
+  //           <video playsInline muted ref={myVideo} autoPlay 
+  //           style={{
+  //             display:'flex',
+  //             position:'relative',
+  //             textAlign: "center",
+  //             zindex: 9,
+  //             width: 640,
+  //             height: 480,
+  //           }}
+  //           />
+  //         </Grid>
+  //       </Paper>
+  //     )}
+  //     {callAccepted && !callEnded && (
+  //       <Paper className={classStyle.paper}>
+  //         <Grid item xs={12} md={6}>
+  //           <Typography variant="h5" gutterBottom>{call.name || 'Name'}</Typography>
+  //           <div>
+  //           <video playsInline ref={userVideo} autoPlay 
+  //           style={{
+  //             display:'flex',
+  //             position: "absolute",
+  //             textAlign: "center",
+  //             zIndex: 9,
+  //             width: 640,
+  //             height: 480,
+  //             right:'80px'
+  //           }}
+  //           />
+  //           <canvas ref={canvasRef}
+  //           style={{
+  //             position: "absolute",
+  //             textAlign: "center",
+  //             zIndex: 10,
+  //             right:'80px'
+
+  //           }}
+  //           />
+  //           </div>
+  //         </Grid>
+  //       </Paper>
+  //     )}
+  //   </Grid>
+  // )
+}
 
 export default VideoPlayer;
