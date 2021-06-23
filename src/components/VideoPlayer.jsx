@@ -1,9 +1,10 @@
-import React, { useContext,useRef,useEffect } from 'react';
+import React, { useContext,useRef,useEffect,useState } from 'react';
 import { Grid, Typography, Paper, makeStyles } from '@material-ui/core';
 import * as tf from "@tensorflow/tfjs";
 import { SocketContext } from '../Context';
 import {drawRect} from "./utilities"; 
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+
 
 const useStyles = makeStyles((theme) => ({
   gridContainer: {
@@ -21,15 +22,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const VideoPlayer = () => {
-  const { name, callAccepted, myVideo, userVideo, callEnded, stream, call } = useContext(SocketContext);
+  const { name, callAccepted, myVideo, userVideo, callEnded, stream, call, sendMessage, messages } = useContext(SocketContext);
   const classStyle = useStyles();
   const canvasRef = useRef(null);
   // Main function
   const runCoco = async () => {
     // 3. TODO - Load network 
-    // e.g. const net = await cocossd.load();
-    // https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json
-    //'https://tensorflowjsrealtimemodel123.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json'
+   
     const net = await tf.loadGraphModel('https://tensorflowjsrealtimemodel123.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json')
     
     //  Loop and detect hands
@@ -38,6 +37,7 @@ const VideoPlayer = () => {
       
     }, 16.7);
   }
+
   const detect = async (net) => {
     // Check data is available
     if (
@@ -85,20 +85,23 @@ const VideoPlayer = () => {
     }
   };
 
-  useEffect(()=>{
-    runCoco()
-    SpeechRecognition.startListening({ continuous: 'true',language: 'en-IN'})
-  }, []);
-
-  console.log(myVideo)
+  
     const {
-      startListening,
-      stopListening,
       transcript,
       listening,
       browserSupportsSpeechRecognition,
     } = useSpeechRecognition();
-    
+
+  useEffect(()=>{
+    runCoco()
+    SpeechRecognition.startListening({ continuous: true})
+  }, []);
+
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
+
+
 
   return(
     <Grid container className={classStyle.gridContainer}>
@@ -107,15 +110,9 @@ const VideoPlayer = () => {
           <Grid item xs={12} md={6}>
           {(callAccepted && !callEnded ) ? (
             <div>
-              {console.log("hi")}
               <Typography variant="h5" gutterBottom>{call.name || 'Name'}</Typography>
               <div>
-              <button
-                onClick={startListening}
-                >start
-              </button>
-                {console.log(listening)}
-                <video playsInline muted ref={userVideo} autoPlay 
+                <video playsInline  ref={userVideo} autoPlay 
                   style={{
                     display:'flex',
                     position: "relative",
@@ -125,12 +122,8 @@ const VideoPlayer = () => {
                     height: 480,
                     right:'100 px'
                   }}
-                >
-                  
-                </video>
-                <p style={{backgroundColor:'#92a8d1'}}>
-                  {'>'}{transcript}{console.log({transcript})}
-                  </p>
+                />
+        
                 <canvas ref={canvasRef}
                   style={{
                     position: 'absolute',
@@ -140,15 +133,18 @@ const VideoPlayer = () => {
                     bottom :'10px'
                   }}
                 />
+
+                <p onChange={()=>sendMessage(transcript)} style={{backgroundColor:'#92a8d1',width:640,height:50}}>
+                  {'>'+transcript }
+                  </p>
+                <p style={{backgroundColor:'#12a8d1',width:640,height:50}}>
+                  {'>>'+messages}
+                  </p>
+
               </div>
             </div>) : (
             <div>
               <Typography variant="h5" gutterBottom>{name || 'Name'}</Typography>
-              <button
-                onClick={startListening}
-                >start
-              </button>
-                {console.log(listening)}
                   <video playsInline muted ref={myVideo} autoPlay 
                     style={{
                       display:'flex',
@@ -160,9 +156,6 @@ const VideoPlayer = () => {
                     }}
                   >
                   </video>
-                  <p style={{backgroundColor:'#92a8d1'}}>
-                  {'>'}{transcript}{console.log({transcript})}
-                  </p>
             </div>)}
           </Grid>
         </Paper>

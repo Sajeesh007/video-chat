@@ -4,16 +4,18 @@ import Peer from 'simple-peer';
 
 const SocketContext = createContext();
 
-// const socket = io('http://localhost:5000');
-const socket = io('https://safeerchatapp.herokuapp.com');
+const socket = io('//https://safeerchatapp.herokuapp.com');
+//const socket = io('http://localhost:5000');         
 
 const ContextProvider = ({ children }) => {
-  const [callAccepted, setCallAccepted] = useState(false);
-  const [callEnded, setCallEnded] = useState(false);
-  const [stream, setStream] = useState();
-  const [name, setName] = useState('');
-  const [call, setCall] = useState({});
-  const [me, setMe] = useState('');
+  const [callAccepted, setCallAccepted] = useState(false)
+  const [callEnded, setCallEnded] = useState(false)
+  const [stream, setStream] = useState()
+  const [name, setName] = useState('')
+  const [call, setCall] = useState({})
+  const [me, setMe] = useState('')
+  const [messages,setMessages] = useState('')
+  const [recieverId, setRecieverId] = useState('')
 
   const myVideo = useRef();
   const userVideo = useRef();
@@ -55,6 +57,7 @@ const ContextProvider = ({ children }) => {
 
   const callUser = (id) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
+    setRecieverId(id)
 
     peer.on('signal', (data) => {
       socket.emit('callUser', { userToCall: id, signalData: data, from: me, name });
@@ -80,6 +83,22 @@ const ContextProvider = ({ children }) => {
 
     window.location.reload();
   };
+  
+  socket.on('recieve-message',(message) =>{
+    setMessages(message)
+  })
+  const sendMessage = (transcript)=>{
+      socket.emit('send-message',transcript,recieverId)
+      console.log(transcript)
+  }
+  const recieveMessage = ()=>{
+    socket.on('recieve-message',(message) =>{
+      setMessages(message)
+      console.log(message)
+    })
+  }
+  recieveMessage(); 
+
   return (
     <SocketContext.Provider value={{
       call,
@@ -94,6 +113,8 @@ const ContextProvider = ({ children }) => {
       callUser,
       leaveCall,
       answerCall,
+      sendMessage,
+      messages
     }}
     >
       {children}
