@@ -36,6 +36,11 @@ const Sidebar = ({ children }) => {
     })
   }, [])
 
+  const handleChange =(e)=>{
+    setIdToCall(e.target.value)
+    setRecieverId(e.target.value);
+  }
+
   const handleClick = async ()=>{
     callUser(idToCall);
     await (callAccepted) && (history.push('/meeting'))
