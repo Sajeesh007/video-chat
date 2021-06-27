@@ -1,10 +1,25 @@
-import React, { createContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useState, useRef, useEffect,useContext } from 'react';
 import { io } from 'socket.io-client';
 import Peer from 'simple-peer';
+import firebase from './config'
+import { useHistory } from 'react-router-dom';
+
+
 
 const SocketContext = createContext();
+const FirebaseContext = createContext(null)
+const AuthContext = createContext(null)
 
-const socket = io('//https://safeerchatapp.herokuapp.com');
+export function useFirebase(){
+  return useContext(FirebaseContext)
+}
+export function useAuth(){
+  return useContext(AuthContext)
+}
+
+
+
+const socket = io('https://tie-appaudio.herokuapp.com/');
 //const socket = io('http://localhost:5000');         
 
 const ContextProvider = ({ children }) => {
@@ -16,6 +31,16 @@ const ContextProvider = ({ children }) => {
   const [me, setMe] = useState('')
   const [messages,setMessages] = useState('')
   const [recieverId, setRecieverId] = useState('')
+  
+  const history =useHistory()
+
+  const [user,setUser] = useState('')
+  
+  const [videoOn, setVideoOn] = useState(false)
+  const [micOn, setMicOn] = useState(false)
+  const [fullScreenOn,setFullScreenOn] = useState('')
+  const [userSigned,setUserSigned] = useState('')
+  
 
   const myVideo = useRef();
   const userVideo = useRef();
@@ -25,9 +50,11 @@ const ContextProvider = ({ children }) => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
-
         myVideo.current.srcObject = currentStream;
-      });
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
 
     socket.on('me', (id) => setMe(id));
 
@@ -46,9 +73,13 @@ const ContextProvider = ({ children }) => {
       socket.emit('answerCall', { signal: data, to: call.from });
     });
 
-    peer.on('stream', (currentStream) => {
+    try{
+      peer.on('stream', (currentStream) => {
       userVideo.current.srcObject = currentStream;
-    });
+    })}
+    catch(err){
+      console.log(err);
+    }
 
     peer.signal(call.signal);
 
@@ -81,8 +112,9 @@ const ContextProvider = ({ children }) => {
 
     connectionRef.current.destroy();
 
-    window.location.reload();
-  };
+    window.location.replace('http://localhost:3000')
+
+  }
   
   socket.on('recieve-message',(message) =>{
     setMessages(message)
@@ -100,25 +132,35 @@ const ContextProvider = ({ children }) => {
   recieveMessage(); 
 
   return (
-    <SocketContext.Provider value={{
-      call,
-      callAccepted,
-      myVideo,
-      userVideo,
-      stream,
-      name,
-      setName,
-      callEnded,
-      me,
-      callUser,
-      leaveCall,
-      answerCall,
-      sendMessage,
-      messages
-    }}
-    >
-      {children}
-    </SocketContext.Provider>
+    <FirebaseContext.Provider value={firebase}> 
+      <AuthContext.Provider value={{user,setUser,userSigned,setUserSigned}}>
+        <SocketContext.Provider value={{
+          call,
+          callAccepted,
+          myVideo,
+          userVideo,
+          stream,
+          name,
+          setName,
+          callEnded,
+          me,
+          callUser,
+          leaveCall,
+          answerCall,
+          sendMessage,
+          messages,
+          micOn, 
+          setMicOn,
+          videoOn, 
+          setVideoOn,
+          fullScreenOn,
+          setFullScreenOn,
+        }}
+        >
+          {children}
+        </SocketContext.Provider>
+      </AuthContext.Provider>
+    </FirebaseContext.Provider>
   );
 };
 
