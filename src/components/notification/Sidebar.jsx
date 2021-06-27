@@ -17,7 +17,7 @@ import { useHistory } from 'react-router-dom';
 import './Sidebar.css'
 
 const Sidebar = ({ children }) => {
-  const { me,setName,callUser,name } = useContext(SocketContext);
+  const { me,setName,callUser,name,callAccepted,callEnded} = useContext(SocketContext);
   const firebase = useFirebase()
   const {user,setUser,setUserSigned} = useAuth()
   const [idToCall, setIdToCall] = useState('');
@@ -36,7 +36,10 @@ const Sidebar = ({ children }) => {
     })
   }, [])
 
-
+  const handleClick = async ()=>{
+    callUser(idToCall);
+    await (callAccepted) && (history.push('/meeting'))
+  }
 
   return (
     <div className='wraper'>
@@ -44,7 +47,7 @@ const Sidebar = ({ children }) => {
         <h2>New call</h2>
         <div className="calling">
           <input type="text" value={idToCall} onChange={(e) => setIdToCall(e.target.value)} placeholder='Enter the ID to call'/>
-          <button className='buttons' onClick={() => callUser(idToCall)} ><FiVideo className='icon'/> Call</button>
+          <button className='buttons' onClick={handleClick} ><FiVideo className='icon'/> Call</button>
         </div>
         
       </div>

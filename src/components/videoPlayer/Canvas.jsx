@@ -37,8 +37,8 @@ export default function Canvas({width,height}) {
 
   
       // Set canvas height and width
-      canvasRef.current.width = 1918;
-      canvasRef.current.height = 898;
+      canvasRef.current.width = videoWidth;
+      canvasRef.current.height = videoHeight;
       
       // 4. TODO - Make Detections
       const img = tf.browser.fromPixels(video)

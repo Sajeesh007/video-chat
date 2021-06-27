@@ -15,12 +15,10 @@ export default function Meeting() {
   return (
     <div className='meeting-container'>
       <div className="video-wrapper">
-        {(callAccepted && !callEnded ) ?
-         (<div className="meeting-uservideo">
+      <div className="meeting-uservideo">
          <UserVideo width={100} height={100}/> 
          <Canvas width={100} height={100}/> 
-       </div>) :
-        (<MyVideo width={1535} height={720}/>)}
+       </div>
       </div>
       <div className="menu-wrapper">
         <Menu/>

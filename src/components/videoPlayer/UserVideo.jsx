@@ -23,7 +23,7 @@ export default function UserVideo({width,height}) {
           width:`${width}%`,
           height:`${height}%`,
         }}
-        > 
+        > {console.log(userVideo)}
         </video>
         <Subtitles/>
     </div> 
