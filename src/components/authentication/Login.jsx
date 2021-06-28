@@ -7,6 +7,7 @@ function Login() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
   const history = useHistory()
   const firebase = useFirebase()
@@ -17,19 +18,18 @@ function Login() {
     firebase.auth().signInWithEmailAndPassword(email, password).then((userCredential)=>{
       setUser(userCredential.user.displayName)
       alert('logged in')
+      history.push('/')
     })
     .catch((error)=> {
       var errorCode = error.code;
       var errorMessage = error.message;
       if (errorCode === 'auth/wrong-password') {
-        alert('Wrong password.');
+        setError('Wrong password');
       } else {
-        alert(errorMessage);
+        console.log(errorMessage);
       }
       console.log(error);
-    }).finally(()=>{
-      history.push('/')
-    })
+    })    
   }
 
   return (
@@ -52,6 +52,7 @@ function Login() {
             name="password"
             onChange={(e)=>{setPassword(e.target.value)}}
           />
+          <p>{error}</p>
         </form>
         <div className="button-wrapper">
           <button onClick={handleLogin}>Login</button>

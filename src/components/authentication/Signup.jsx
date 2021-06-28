@@ -19,11 +19,12 @@ export default function Signup() {
     .then((userCredential) => {
       userCredential.user.updateProfile({ displayName: username})
       setUser(username)
+      alert('New account created. Now Log in to enjoy the experience')
     })
     .catch((error) => {
         console.log(error);
     }).finally(()=>{
-      history.push('/')
+      history.push('/login')
     })
   }
   const handleClick = (e) =>{
