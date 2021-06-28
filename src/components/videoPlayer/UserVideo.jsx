@@ -15,20 +15,24 @@ export default function UserVideo({width,height}) {
     <div className='user-video-container'>
       {/* <div className="my-video-draggable">
         <video ref={myVideo} playsInline muted autoPlay />
-       
+      
       </div> */}
 
       <div className="profile-info">
           <img src={`https://ui-avatars.com/api/?name=${call.name}&background=0add8c&color=ffffff`} alt="img" />
           <h2>{call.name}</h2>
       </div>
-      <video className={userVideoOn ? 'user-video-hide' : 'user-video' } playsInline {...userMicOn ? {muted : true} : {}}ref={userVideo} autoPlay width={`${width}%`} height={`${height}%`}
+      {(userVideoOn) ? (
+      <div className="skelton">
+        <img src={`https://ui-avatars.com/api/?name=${call.name}&background=0add8c&color=ffffff`} alt="img" />
+      </div> ) :
+      (<video className='user-video' playsInline {...userMicOn ? {muted : true} : {}}ref={userVideo} autoPlay width={`${width}%`} height={`${height}%`}
         style={{  
           width:`${width}%`,
           height:`${height}%`,
         }}
-        > 
-        </video>
+        /> )
+}
         <Subtitles/>
     </div> 
     )

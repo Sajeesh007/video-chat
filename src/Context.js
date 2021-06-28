@@ -20,7 +20,7 @@ export function useAuth(){
 
 
 // const socket = io('https://tie-appaudio.herokuapp.com/');
-const socket = io('http://localhost:5000');         
+const socket = io('https://video-chat-backend123.herokuapp.com/');         
 
 const ContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false)

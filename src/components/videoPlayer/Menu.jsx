@@ -16,7 +16,6 @@ export default function Menu() {
   const [micIcon, setMicIcon] = useState(<FiMic/>)
   const [videoOn, setVideoOn] = useState(false)
   const [micOn, setMicOn] = useState(false)
-  // const [fullScreenIcon, setFullScreenIcon] = useState(<RiFullscreenFill/>)
   
   
   const handleHangup = ()=>{
@@ -28,36 +27,28 @@ export default function Menu() {
     switch(item){
       case 'v' :  if(videoOn){
                     setVideoOn(false)
-                    sendInfo({mic:false},{video:false})
+                    sendInfo(false,false)
                     recieveInfo()
                     setVideoIcon(<FiVideo/>)
                   }else{
                     setVideoOn(true)
-                    sendInfo({mic:false},{video:true})
+                    sendInfo(false,true)
                     recieveInfo()
                     setVideoIcon(<FiVideoOff/>)
                   }
                   break
       case 'm'  : if(micOn){
                     setMicOn(false)
-                    sendInfo({mic:false},{video:false})
+                    sendInfo(false,false)
                     recieveInfo()
                     setMicIcon(<FiMic/>)
                   }else{
                     setMicOn(true)
-                    sendInfo({mic:true},{video:false})
+                    sendInfo(true,false)
                     recieveInfo()
                     setMicIcon(<FiMicOff/>)
                   }
                   break
-      // case 'f'  : if(fullScreenOn){
-      //               setFullScreenOn(false)
-      //               setFullScreenIcon(<RiFullscreenFill/>)
-      //             }else{
-      //               setFullScreenOn(true)
-      //               setFullScreenIcon(<RiFullscreenExitFill/>)
-      //             }
-      //             break
       default   : console.log('error');
     } 
     
