@@ -19,8 +19,8 @@ export function useAuth(){
 
 
 
-const socket = io('https://tie-appaudio.herokuapp.com/');
-//const socket = io('http://localhost:5000');         
+// const socket = io('https://tie-appaudio.herokuapp.com/');
+const socket = io('http://localhost:5000');         
 
 const ContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false)
@@ -36,9 +36,8 @@ const ContextProvider = ({ children }) => {
 
   const [user,setUser] = useState('')
   
-  const [videoOn, setVideoOn] = useState(false)
-  const [micOn, setMicOn] = useState(false)
-  const [fullScreenOn,setFullScreenOn] = useState('')
+  const [userVideoOn, setUserVideoOn] = useState(false)
+  const [userMicOn, setUserMicOn] = useState(false)
   const [userSigned,setUserSigned] = useState('')
   
 
@@ -98,9 +97,11 @@ const ContextProvider = ({ children }) => {
     });
 
     socket.on('callAccepted', (signal) => {
+      
       setCallAccepted(true);
 
       peer.signal(signal);
+
     });
 
     connectionRef.current = peer;
@@ -118,16 +119,29 @@ const ContextProvider = ({ children }) => {
   socket.on('recieve-message',(message) =>{
     setMessages(message)
   })
+
   const sendMessage = (transcript)=>{
       socket.emit('send-message',transcript,recieverId)
 
   }
+
   const recieveMessage = ()=>{
     socket.on('recieve-message',(message) =>{
       setMessages(message)
     })
   }
-  recieveMessage(); 
+  
+  const sendInfo = (mic,video)=>{
+    socket.emit('send-info',mic,video,recieverId)
+
+  }
+
+  const recieveInfo = ()=>{
+    socket.on('recieve-info',(mic,video) =>{
+      setUserMicOn(mic)
+      setUserVideoOn(video)
+    })
+  }
 
 
   return (
@@ -148,14 +162,15 @@ const ContextProvider = ({ children }) => {
           answerCall,
           sendMessage,
           messages,
-          micOn, 
-          setMicOn,
-          videoOn, 
-          setVideoOn,
-          fullScreenOn,
-          setFullScreenOn,
+          userMicOn, 
+          setUserMicOn,
+          userVideoOn, 
+          setUserVideoOn,
           recieverId,
           setRecieverId,
+          recieveMessage,
+          sendInfo,
+          recieveInfo,
         }}
         >
           {children}

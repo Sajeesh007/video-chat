@@ -5,19 +5,12 @@ import { ImWhatsapp } from "react-icons/im";
 import { FiVideo,FiCopy } from "react-icons/fi";
 import { useHistory } from 'react-router-dom';
 
-//FiVideoOff
-{/* <TextField label="ID to call" value={idToCall} onChange={(e) => setIdToCall(e.target.value)} fullWidth /> */}
-        
-        {/* callAccepted && !callEnded 
-          <button className='button-id' onClick={leaveCall} >
-            Hang Up
-          </button> */}
 
 
 import './Sidebar.css'
 
 const Sidebar = ({ children }) => {
-  const { me,setName,callUser,setRecieverId} = useContext(SocketContext);
+  const { me,setName,callUser,setRecieverId,callAccepted} = useContext(SocketContext);
   const firebase = useFirebase()
   const {user,setUser,setUserSigned} = useAuth()
   const [idToCall, setIdToCall] = useState('');
@@ -41,10 +34,13 @@ const Sidebar = ({ children }) => {
     setRecieverId(e.target.value);
   }
 
+
   const handleClick = async ()=>{
     callUser();
-    history.push('/meeting')
+
+    history.push('/meeting')  
   }
+
 
   return (
     <div className='wraper'>

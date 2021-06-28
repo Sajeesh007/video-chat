@@ -5,7 +5,7 @@ import { MdCallReceived} from "react-icons/md";
 import { useHistory } from 'react-router-dom';
 
 const Notifications = () => {
-  const { answerCall, call, callAccepted,callEnded} = useContext(SocketContext);
+  const { answerCall, call, callAccepted} = useContext(SocketContext);
   const history =useHistory()
 
   const handleClick =()=>{
