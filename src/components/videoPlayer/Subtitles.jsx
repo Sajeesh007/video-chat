@@ -4,7 +4,7 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import './Subtitles.css'
 
 export default function Subtitles() {
-  const { sendMessage, messages } = useContext(SocketContext);
+  const { sendMessage, messages,recieverId } = useContext(SocketContext);
 
   const {
     transcript,
@@ -23,10 +23,12 @@ export default function Subtitles() {
       <p className='my-subtitles' onChange={()=>sendMessage(transcript)} >
               {transcript}
               {console.log(transcript)}
-              {console.log(message)}
+              {console.log('id '+recieverId)}
+              
       </p>
       <p className='user-subtitles' >
         {'>>'+messages}
+        {console.log(messages)}
       </p>
     </div>
   )

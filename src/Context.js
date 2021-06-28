@@ -86,11 +86,12 @@ const ContextProvider = ({ children }) => {
     connectionRef.current = peer;
   };
 
-  const callUser = (id) => {
+  const callUser = () => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
 
     peer.on('signal', (data) => {
-      socket.emit('callUser', { userToCall: id, signalData: data, from: me, name });
+      socket.emit('callUser', { userToCall: recieverId, signalData: data, from: me, name });
+      console.log(recieverId);
     });
 
     peer.on('stream', (currentStream) => {
@@ -120,12 +121,11 @@ const ContextProvider = ({ children }) => {
   })
   const sendMessage = (transcript)=>{
       socket.emit('send-message',transcript,recieverId)
-      console.log(transcript)
+
   }
   const recieveMessage = ()=>{
     socket.on('recieve-message',(message) =>{
       setMessages(message)
-      console.log(message)
     })
   }
   recieveMessage(); 
@@ -155,6 +155,7 @@ const ContextProvider = ({ children }) => {
           setVideoOn,
           fullScreenOn,
           setFullScreenOn,
+          recieverId,
           setRecieverId,
         }}
         >

@@ -42,7 +42,7 @@ const Sidebar = ({ children }) => {
   }
 
   const handleClick = async ()=>{
-    callUser(idToCall);
+    callUser();
     history.push('/meeting')
   }
 
