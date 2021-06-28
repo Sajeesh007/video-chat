@@ -29,7 +29,7 @@ export default  function Header() {
                 <h3>Welcome {name}</h3>
                 <button onClick={handleClick}>
                     <FiLogOut className='icon'/>
-                    Sign out
+                    Logout
                 </button>
             </div>)}
 

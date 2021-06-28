@@ -12,23 +12,34 @@ export default function Signup() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const [error, setError] = useState('')
+  const [formErrorPassword, setFormErrorPassword] = useState(false)
+  const [formErrorUsername, setFormErrorUsername] = useState(false)
+  const [formErrorEmail, setFormErrorEmail] = useState(false)
 
   
   const handleSubmit = () =>{
-    firebase.auth().createUserWithEmailAndPassword(email.trim(), password)
+    (formErrorUsername || formErrorEmail || formErrorPassword) ? 
+    (alert('field cannot be empty')) :
+    (firebase.auth().createUserWithEmailAndPassword(email.trim(), password)
     .then((userCredential) => {
       userCredential.user.updateProfile({ displayName: username})
       setUser(username)
       alert('New account created. Now Log in to enjoy the experience')
-    })
-    .catch((error) => {
-        console.log(error);
-    }).finally(()=>{
       history.push('/login')
     })
+    .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/email-already-in-use') {
+          setError(true);
+        } else {
+          console.log(errorMessage);
+        }
+    }))
   }
   const handleClick = (e) =>{
-    e.preventDefault()
+    e.preventDefault();
     history.push('/login')
   }
 
@@ -38,6 +49,20 @@ export default function Signup() {
     }
   }, [])
 
+  const handleUser= (e) =>{
+    (e.target.value.length === 0) ? (setFormErrorUsername(true)) : (setFormErrorUsername( false))
+    setUsername(e.target.value)
+    
+  }
+  const handleEmail= (e) =>{
+    (e.target.value.length === 0) ? (setFormErrorEmail(true)) : (setFormErrorEmail(false))
+    setEmail(e.target.value)
+  }
+  const handlePassword= (e) =>{
+    (e.target.value.length === 0) ? (setFormErrorPassword(true)) : (setFormErrorPassword(false))
+    setPassword(e.target.value)
+
+  }
 
   return (
     <div className="signup-container">
@@ -48,17 +73,18 @@ export default function Signup() {
           type="text"
           id="uname"
           name="name"
-          onChange={(e)=>setUsername(e.target.value)}
+          onChange={handleUser}
         />
-    
+          <p>{formErrorUsername&& 'Field cannot be empty'}</p>
         <label htmlFor="ename">Email</label>
         <input
           className="input"
           type="email"
           id="ename"
           name="email"
-          onChange={(e)=>setEmail(e.target.value)}
+          onChange={handleEmail}
         />
+          <p>{error && 'Email already in use' }{formErrorEmail && 'Field cannot be empty' }</p>
      
         <label htmlFor="lname">Password</label>
         <input
@@ -66,8 +92,9 @@ export default function Signup() {
           type="password"
           id="lname"
           name="password"
-          onChange={(e)=>setPassword(e.target.value)}
+          onChange={handlePassword}
         />
+        <p>{formErrorPassword && 'Field cannot be empty' }</p>
       </form>
 
       <div className="button-wrapper">

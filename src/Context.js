@@ -91,7 +91,6 @@ const ContextProvider = ({ children }) => {
 
     peer.on('signal', (data) => {
       socket.emit('callUser', { userToCall: recieverId, signalData: data, from: me, name });
-      console.log(recieverId);
     });
 
     peer.on('stream', (currentStream) => {

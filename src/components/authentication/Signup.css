@@ -16,7 +16,15 @@
     color: white;
     font-size: 20px;
   }
-  
+
+  .signup-container .form-wrapper p{
+    color:rgb(10, 221, 140);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
   .signup-container .input {
     border: none;
     border-radius: 100px;

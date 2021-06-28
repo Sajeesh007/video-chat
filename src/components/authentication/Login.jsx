@@ -8,16 +8,21 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [formErrorPassword, setFormErrorPassword] = useState(false)
+  const [formErrorEmail, setFormErrorEmail] = useState(false)
+
 
   const history = useHistory()
   const firebase = useFirebase()
   const {setUser} = useAuth()
 
   const handleLogin = (e) =>{
-    e.preventDefault()
-    firebase.auth().signInWithEmailAndPassword(email, password).then((userCredential)=>{
+    e.preventDefault();
+    ( formErrorEmail || formErrorPassword) ? 
+    (alert('Field cannot be empty')) :
+    (firebase.auth().signInWithEmailAndPassword(email, password).then((userCredential)=>{
       setUser(userCredential.user.displayName)
-      alert('logged in')
+      alert('Logged in')
       history.push('/')
     })
     .catch((error)=> {
@@ -28,8 +33,16 @@ function Login() {
       } else {
         console.log(errorMessage);
       }
-      console.log(error);
-    })    
+    }))   
+  }
+  const handlePassword= (e) =>{
+    (e.target.value.length === 0) ? (setFormErrorPassword(true)) : (setFormErrorPassword( false))
+    setPassword(e.target.value)
+    
+  }
+  const handleEmail= (e) =>{
+    (e.target.value.length === 0) ? (setFormErrorEmail(true)) : (setFormErrorEmail(false))
+    setEmail(e.target.value)
   }
 
   return (
@@ -41,18 +54,18 @@ function Login() {
             type="email"
             id="fname"
             name="email"
-            onChange={(e)=>{setEmail(e.target.value)}}
+            onChange={handleEmail}
           />
-       
+          <p>{formErrorEmail && 'Field cannot be empty'}</p>
           <label htmlFor="lname">Password</label>
           <input
             className="input"
             type="password"
             id="lname"
             name="password"
-            onChange={(e)=>{setPassword(e.target.value)}}
+            onChange={handlePassword}
           />
-          <p>{error}</p>
+          <p>{error} {formErrorPassword && 'Field cannot be empty'}</p>
         </form>
         <div className="button-wrapper">
           <button onClick={handleLogin}>Login</button>
