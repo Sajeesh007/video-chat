@@ -30,8 +30,7 @@ export default function UserVideo({width,height}) {
           width:`${width}%`,
           height:`${height}%`,
         }}
-        /> )
-}
+        /> 
         <Subtitles/>
     </div> 
     )
