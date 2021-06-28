@@ -14,10 +14,20 @@
     border-style: solid;
     border-color: white;
     border-radius: 9999px;
+    z-index: 10;
 }
 
 .user-video{
     display:flex;
+    position: absolute;
+    left:0px;
+    right: 0px;
+    text-align: center;
+    z-index: 8; 
+    object-fit: fill;
+}
+.user-video-hide{
+    display:none;
     position: absolute;
     left:0px;
     right: 0px;
