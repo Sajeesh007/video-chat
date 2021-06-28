@@ -62,6 +62,7 @@ const ContextProvider = ({ children }) => {
     });
   }, []);
   
+  
 
   const answerCall = () => {
     setCallAccepted(true);
@@ -171,6 +172,7 @@ const ContextProvider = ({ children }) => {
           recieveMessage,
           sendInfo,
           recieveInfo,
+          setCallAccepted
         }}
         >
           {children}

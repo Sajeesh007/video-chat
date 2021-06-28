@@ -1,7 +1,6 @@
-import React,{useState,useContext} from "react";
+import React,{useState,useContext,useEffect} from "react";
 import { FiVideo,FiVideoOff,FiMic,FiMicOff} from "react-icons/fi";
 import { ImPhoneHangUp } from "react-icons/im";
-import { RiFullscreenFill,RiFullscreenExitFill } from "react-icons/ri";
 import { SocketContext } from "../../Context";
 
 import './Menu.css'
@@ -22,30 +21,34 @@ export default function Menu() {
     leaveCall()
   }
 
+  useEffect(() => {
+    recieveInfo()
+  }, [videoOn,micOn])
+
 
   const handleClick = (item)=>{
     switch(item){
       case 'v' :  if(videoOn){
                     setVideoOn(false)
                     sendInfo(false,false)
-                    recieveInfo()
+                    
                     setVideoIcon(<FiVideo/>)
                   }else{
                     setVideoOn(true)
                     sendInfo(false,true)
-                    recieveInfo()
+                   
                     setVideoIcon(<FiVideoOff/>)
                   }
                   break
       case 'm'  : if(micOn){
                     setMicOn(false)
                     sendInfo(false,false)
-                    recieveInfo()
+                    
                     setMicIcon(<FiMic/>)
                   }else{
                     setMicOn(true)
                     sendInfo(true,false)
-                    recieveInfo()
+                    
                     setMicIcon(<FiMicOff/>)
                   }
                   break
