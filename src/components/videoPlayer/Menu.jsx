@@ -9,7 +9,7 @@ import './Menu.css'
 
 export default function Menu() {
 
-  const {videoOn,micOn,setVideoOn,setMicOn,fullScreenOn,setFullScreenOn,leaveCall,callAccepted,callEnded} = useContext(SocketContext)
+  const {videoOn,micOn,setVideoOn,setMicOn,fullScreenOn,setFullScreenOn,leaveCall} = useContext(SocketContext)
   
 
   const [videoIcon, setVideoIcon] = useState(<FiVideo/>)
@@ -61,14 +61,9 @@ export default function Menu() {
       <div className="icon" onClick={()=>handleClick('m')}>
         {micIcon}
       </div>
-      {/* <div className="icon" onClick={()=>handleClick('f')}>
-        {fullScreenIcon}
-      </div> */}
-
-      {(callAccepted && !callEnded) &&(
       <div className="icon-red" onClick={handleHangup}>
         <ImPhoneHangUp style={{fontSize:'24px'}}/>
-      </div>)}
+      </div>
 
     </div>
   )
