@@ -88,7 +88,6 @@ const ContextProvider = ({ children }) => {
 
   const callUser = (id) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
-    setRecieverId(id)
 
     peer.on('signal', (data) => {
       socket.emit('callUser', { userToCall: id, signalData: data, from: me, name });
@@ -131,6 +130,7 @@ const ContextProvider = ({ children }) => {
   }
   recieveMessage(); 
 
+
   return (
     <FirebaseContext.Provider value={firebase}> 
       <AuthContext.Provider value={{user,setUser,userSigned,setUserSigned}}>
@@ -155,6 +155,7 @@ const ContextProvider = ({ children }) => {
           setVideoOn,
           fullScreenOn,
           setFullScreenOn,
+          setRecieverId,
         }}
         >
           {children}

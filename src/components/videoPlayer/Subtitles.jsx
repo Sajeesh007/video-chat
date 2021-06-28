@@ -21,7 +21,9 @@ export default function Subtitles() {
   return(
     <div className='subtitles-container'>
       <p className='my-subtitles' onChange={()=>sendMessage(transcript)} >
-              {transcript }
+              {transcript}
+              {console.log(transcript)}
+              {console.log(message)}
       </p>
       <p className='user-subtitles' >
         {'>>'+messages}

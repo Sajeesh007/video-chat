@@ -24,6 +24,7 @@ export default function UserVideo({width,height}) {
           height:`${height}%`,
         }}
         > {console.log(userVideo)}
+          {console.log(call.name)}
         </video>
         <Subtitles/>
     </div> 
