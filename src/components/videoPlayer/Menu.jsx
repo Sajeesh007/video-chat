@@ -8,7 +8,7 @@ import './Menu.css'
 
 export default function Menu() {
 
-  const {leaveCall,sendInfo,recieveInfo,userVideoOn,userMicOn,isCallReciever} = useContext(SocketContext)
+  const {leaveCall,sendInfo,recieveInfo} = useContext(SocketContext)
   
 
   const [videoIcon, setVideoIcon] = useState(<FiVideo/>)

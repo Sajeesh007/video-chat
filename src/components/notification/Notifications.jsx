@@ -17,8 +17,6 @@ const Notifications = () => {
     history.push('/meeting')
   }
 
-
-
   return (
     <>
       {call.isReceivingCall && !callAccepted && (

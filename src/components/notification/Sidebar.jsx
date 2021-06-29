@@ -12,7 +12,7 @@ import './Sidebar.css'
 const Sidebar = ({ children }) => {
   const { me,setName,callUser,setRecieverId,call} = useContext(SocketContext);
   const firebase = useFirebase()
-  const {user,setUser,setUserSigned} = useAuth()
+  const {setUser,setUserSigned} = useAuth()
   const [idToCall, setIdToCall] = useState('');
   const history =useHistory()
 

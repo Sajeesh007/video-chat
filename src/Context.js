@@ -149,7 +149,6 @@ const ContextProvider = ({ children }) => {
   const recieveName = () =>{
     socket.on('recieve-name',(callerName)=>{
       setCallRecieverName(callerName)
-      console.log('name  '+name);
     })
     
   } 

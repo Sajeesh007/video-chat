@@ -6,8 +6,6 @@ function Skelton() {
 
     const{callRecieverName,isCallReciever,call} = useContext(SocketContext)
 
-    console.log(callRecieverName)
-
     return (
         <div className="skelton-container">
         <img src={`https://ui-avatars.com/api/?name=${isCallReciever ? call.name :callRecieverName}&background=0add8c&color=ffffff`} alt="img" />
@@ -18,7 +16,6 @@ function Skelton() {
 function ProfileInfo() {
     const{callRecieverName,isCallReciever,call} = useContext(SocketContext)
     
-    console.log(callRecieverName)
 
     return (
         <div className="profile-info">
