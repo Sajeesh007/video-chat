@@ -13,12 +13,16 @@ export default function Meeting() {
   const [callStarted, setCallStarted] = useState(false)
   const [showButton, setShowButton] = useState(false)
 
-  const { callAccepted,isCallReciever, } = useContext(SocketContext)
+  const { callAccepted,isCallReciever,recieveName} = useContext(SocketContext)
   const history = useHistory()
   
   useEffect(() => {
     history.push('/meeting')
   }, [callStarted])
+
+  useEffect(() => {
+    recieveName()
+  }, [])
 
   const handleClick= ()=>{
     setCallStarted(true)

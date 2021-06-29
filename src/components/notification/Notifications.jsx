@@ -6,11 +6,12 @@ import { useHistory } from 'react-router-dom';
 
 
 const Notifications = () => {
-  const { answerCall, call, callAccepted,setIsCallReciever,recieveCall} = useContext(SocketContext);
+  const { answerCall, call, callAccepted,setIsCallReciever,recieveCall,sendName} = useContext(SocketContext);
   const history =useHistory()
 
   const handleClick =()=>{
     answerCall()
+    sendName()
     setIsCallReciever(true)
     recieveCall()
     history.push('/meeting')

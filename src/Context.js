@@ -40,7 +40,7 @@ const ContextProvider = ({ children }) => {
   const [userMicOn, setUserMicOn] = useState(false)
   const [userSigned,setUserSigned] = useState('')
   const [isCallReciever, setIsCallReciever] = useState(false)
-  const [callRecieverName, setCallRecieverName] = useState(false)
+  const [callRecieverName, setCallRecieverName] = useState('name')
   
   const myVideo = useRef();
   const userVideo = useRef();
@@ -70,13 +70,13 @@ const ContextProvider = ({ children }) => {
 
 
   const answerCall = () => {
-    setCallRecieverName(name)
+    
     setCallAccepted(true);
 
     const peer = new Peer({ initiator: false, trickle: false, stream });
 
     peer.on('signal', (data) => {
-      socket.emit('answerCall', { signal: data, to: call.from });
+      socket.emit('answerCall', { signal: data, to: call.from, callerName:name });
     });
 
     peer.on('stream', (currentStream) => {
@@ -103,7 +103,7 @@ const ContextProvider = ({ children }) => {
     socket.on('callAccepted', (signal) => {
       
       setCallAccepted(true);
-
+      
       peer.signal(signal);
 
     });
@@ -119,10 +119,6 @@ const ContextProvider = ({ children }) => {
     window.location.replace('http://localhost:3000')
 
   }
-  
-  socket.on('recieve-message',(message) =>{
-    setMessages(message)
-  })
 
   const sendMessage = (transcript)=>{
     isCallReciever ? (socket.emit('send-message',transcript,call.from)) : (socket.emit('send-message',transcript,recieverId))
@@ -137,8 +133,6 @@ const ContextProvider = ({ children }) => {
   
   const sendInfo = (obj)=>{
     isCallReciever ? (socket.emit('send-info',obj.mic,obj.video,call.from)) : (socket.emit('send-info',obj.mic,obj.video,recieverId)) ;
-
-    console.log(obj.mic+ '  ' +obj.video);
   }
 
   const recieveInfo = ()=>{
@@ -147,6 +141,19 @@ const ContextProvider = ({ children }) => {
       setUserVideoOn(video)
     })
   }
+
+  const sendName = () =>{
+    socket.emit('send-name',name,call.from)
+  } 
+
+  const recieveName = () =>{
+    socket.on('recieve-name',(callerName)=>{
+      setCallRecieverName(callerName)
+      console.log('name  '+name);
+    })
+    
+  } 
+
 
 
   return (
@@ -181,6 +188,8 @@ const ContextProvider = ({ children }) => {
           isCallReciever,
           recieveCall,
           callRecieverName,
+          sendName,
+          recieveName
         }}
         >
           {children}
