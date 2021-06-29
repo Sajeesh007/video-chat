@@ -123,7 +123,7 @@ const ContextProvider = ({ children }) => {
   })
 
   const sendMessage = (transcript)=>{
-      socket.emit('send-message',transcript,recieverId)
+    isCallReciever ? (socket.emit('send-message',transcript,call.from)) : (socket.emit('send-message',transcript,recieverId))
 
   }
 
