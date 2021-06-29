@@ -34,22 +34,23 @@ export default function Menu() {
     switch(item){
       case 'v' :  if(videoOn){
                     setVideoOn(false)
-                    sendInfo({video : false})
                     setVideoIcon(<FiVideo/>)
+                    micOn ? sendInfo({video :false,mic:true}) : sendInfo({video :false,mic:false}) 
+                    
                   }else{
                     setVideoOn(true)
-                    sendInfo({video :true})
                     setVideoIcon(<FiVideoOff/>)
+                    micOn ? sendInfo({video :true,mic:true}) : sendInfo({video :true,mic:false}) 
                   }
                   break
       case 'm'  : if(micOn){
                     setMicOn(false)
-                    sendInfo({mic:false})
                     setMicIcon(<FiMic/>)
+                    videoOn ? sendInfo({video :true,mic:false}) : sendInfo({video :false,mic:false}) 
                   }else{
                     setMicOn(true)
-                    sendInfo({mic:true})
                     setMicIcon(<FiMicOff/>)
+                    videoOn ? sendInfo({video :true,mic:true}) : sendInfo({video :false,mic:true}) 
                   }
                   break
       default   : console.log('error');

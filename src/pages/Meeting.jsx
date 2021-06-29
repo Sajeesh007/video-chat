@@ -27,7 +27,7 @@ export default function Meeting() {
   if(callAccepted){
     setTimeout(() => {
       setShowButton(true)
-    }, 5000)
+    }, 3000)
   }
 
 

@@ -40,6 +40,7 @@ const ContextProvider = ({ children }) => {
   const [userMicOn, setUserMicOn] = useState(false)
   const [userSigned,setUserSigned] = useState('')
   const [isCallReciever, setIsCallReciever] = useState(false)
+  const [callRecieverName, setCallRecieverName] = useState(false)
   
   const myVideo = useRef();
   const userVideo = useRef();
@@ -69,6 +70,7 @@ const ContextProvider = ({ children }) => {
 
 
   const answerCall = () => {
+    setCallRecieverName(name)
     setCallAccepted(true);
 
     const peer = new Peer({ initiator: false, trickle: false, stream });
@@ -134,7 +136,9 @@ const ContextProvider = ({ children }) => {
   }
   
   const sendInfo = (obj)=>{
-    isCallReciever ? (socket.emit('send-info',obj.mic,obj.video,call.from)) : (socket.emit('send-info',obj.mic,obj.video,recieverId))
+    isCallReciever ? (socket.emit('send-info',obj.mic,obj.video,call.from)) : (socket.emit('send-info',obj.mic,obj.video,recieverId)) ;
+
+    console.log(obj.mic+ '  ' +obj.video);
   }
 
   const recieveInfo = ()=>{
@@ -176,6 +180,7 @@ const ContextProvider = ({ children }) => {
           setIsCallReciever,
           isCallReciever,
           recieveCall,
+          callRecieverName,
         }}
         >
           {children}
