@@ -8,7 +8,7 @@ import './Menu.css'
 
 export default function Menu() {
 
-  const {leaveCall,sendInfo,recieveInfo} = useContext(SocketContext)
+  const {leaveCall,sendInfo,recieveInfo,userVideoOn,userMicOn,isCallReciever} = useContext(SocketContext)
   
 
   const [videoIcon, setVideoIcon] = useState(<FiVideo/>)
@@ -31,24 +31,20 @@ export default function Menu() {
       case 'v' :  if(videoOn){
                     setVideoOn(false)
                     sendInfo(false,false)
-                    
                     setVideoIcon(<FiVideo/>)
                   }else{
                     setVideoOn(true)
                     sendInfo(false,true)
-                   
                     setVideoIcon(<FiVideoOff/>)
                   }
                   break
       case 'm'  : if(micOn){
                     setMicOn(false)
                     sendInfo(false,false)
-                    
                     setMicIcon(<FiMic/>)
                   }else{
                     setMicOn(true)
                     sendInfo(true,false)
-                    
                     setMicIcon(<FiMicOff/>)
                   }
                   break

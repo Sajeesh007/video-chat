@@ -29,7 +29,6 @@ export default function Subtitles() {
       </p>
       <p className='user-subtitles' >
         {'>>'+messages}
-        {console.log(messages)}
       </p>
     </div>
   )

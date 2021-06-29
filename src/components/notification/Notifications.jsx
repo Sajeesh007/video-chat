@@ -1,18 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext,useEffect } from 'react';
 import { SocketContext } from '../../Context';
 import './Notification.css'
 import { MdCallReceived} from "react-icons/md";
 import { useHistory } from 'react-router-dom';
 
+
 const Notifications = () => {
-  const { answerCall, call, callAccepted,setCallReciever} = useContext(SocketContext);
+  const { answerCall, call, callAccepted,setIsCallReciever,recieveCall} = useContext(SocketContext);
   const history =useHistory()
 
   const handleClick =()=>{
-    answerCall();
-    setCallReciever(true)
+    answerCall()
+    setIsCallReciever(true)
+    recieveCall()
     history.push('/meeting')
   }
+
+
 
   return (
     <>

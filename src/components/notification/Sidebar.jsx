@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
 import './Sidebar.css'
 
 const Sidebar = ({ children }) => {
-  const { me,setName,callUser,setRecieverId,callAccepted,callEnded} = useContext(SocketContext);
+  const { me,setName,callUser,setRecieverId,call} = useContext(SocketContext);
   const firebase = useFirebase()
   const {user,setUser,setUserSigned} = useAuth()
   const [idToCall, setIdToCall] = useState('');
@@ -39,6 +39,7 @@ const Sidebar = ({ children }) => {
     callUser();
     history.push('/meeting')
   }
+
 
 
   return (

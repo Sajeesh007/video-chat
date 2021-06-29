@@ -13,7 +13,7 @@ export default function Meeting() {
   const [callStarted, setCallStarted] = useState(false)
   const [showButton, setShowButton] = useState(false)
 
-  const { callAccepted,callEnded,callReciever } = useContext(SocketContext)
+  const { callAccepted,isCallReciever, } = useContext(SocketContext)
   const history = useHistory()
   
   useEffect(() => {
@@ -24,22 +24,26 @@ export default function Meeting() {
     setCallStarted(true)
   }
 
-  setTimeout(() => {
-    setShowButton(true)
-  }, 7000);
+  if(callAccepted){
+    setTimeout(() => {
+      setShowButton(true)
+    }, 5000)
+  }
+
+
 
   return (
     <div className='meeting-container'>
       <div className="video-wrapper">
-          <div className={callReciever ? "meeting-uservideo"  : callStarted ? "meeting-uservideo" : "meeting-uservideo-hide" }>
+          <div className={isCallReciever ? "meeting-uservideo"  : callStarted ? "meeting-uservideo" : "meeting-uservideo-hide" }>
             <ProfileInfo/>
             <UserVideo width={100} height={100}/> 
             <Canvas width={100} height={100}/> 
           </div>
-          {!callReciever && (
+          {!isCallReciever && (
           <div className={callStarted ? "ringing-hide" :"ringing"}>
             {(callAccepted && showButton)? <p>Call accepted</p> : <p>Ringing...</p> }
-            {(callAccepted && !callReciever && showButton) && (<button className='ringing-button' onClick={handleClick}>Go to Call</button>)}
+            {(callAccepted && !isCallReciever && showButton) && (<button className='ringing-button' onClick={handleClick}>Go to Call</button>)}
           </div>)}
       </div>
       <div className="menu-wrapper">

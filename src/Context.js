@@ -39,7 +39,7 @@ const ContextProvider = ({ children }) => {
   const [userVideoOn, setUserVideoOn] = useState(false)
   const [userMicOn, setUserMicOn] = useState(false)
   const [userSigned,setUserSigned] = useState('')
-  const [callReciever, setCallReciever] = useState('')
+  const [isCallReciever, setIsCallReciever] = useState(false)
   
   const myVideo = useRef();
   const userVideo = useRef();
@@ -57,12 +57,16 @@ const ContextProvider = ({ children }) => {
 
     socket.on('me', (id) => setMe(id));
 
-    socket.on('callUser', ({ from, name: callerName, signal }) => {
-      setCall({ isReceivingCall: true, from, name: callerName, signal });
-    });
+    recieveCall()
   }, []);
   
-  
+
+  const recieveCall = ()=>{
+    socket.on('callUser', ({ signal,from, name }) => {
+      setCall({ isReceivingCall: true, from, name, signal })
+    })
+  }
+
 
   const answerCall = () => {
     setCallAccepted(true);
@@ -87,7 +91,7 @@ const ContextProvider = ({ children }) => {
     const peer = new Peer({ initiator: true, trickle: false, stream });
 
     peer.on('signal', (data) => {
-      socket.emit('callUser', { userToCall: recieverId, signalData: data, from: me, name });
+      socket.emit('callUser', { userToCall: recieverId, signalData: data, from: me, name:name });
     });
     
     peer.on('stream', (currentStream) => {
@@ -130,14 +134,14 @@ const ContextProvider = ({ children }) => {
   }
   
   const sendInfo = (mic,video)=>{
-    socket.emit('send-info',mic,video,recieverId)
-
+    isCallReciever ? (socket.emit('send-info',mic,video,call.from)) : (socket.emit('send-info',mic,video,recieverId))
   }
 
   const recieveInfo = ()=>{
     socket.on('recieve-info',(mic,video) =>{
       setUserMicOn(mic)
       setUserVideoOn(video)
+      console.log('recive-info '+mic+' '+video);
     })
   }
 
@@ -170,8 +174,9 @@ const ContextProvider = ({ children }) => {
           sendInfo,
           recieveInfo,
           setCallAccepted,
-          setCallReciever,
-          callReciever,
+          setIsCallReciever,
+          isCallReciever,
+          recieveCall,
         }}
         >
           {children}
