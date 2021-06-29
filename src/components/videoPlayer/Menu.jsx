@@ -23,28 +23,32 @@ export default function Menu() {
 
   useEffect(() => {
     recieveInfo()
-  }, [videoOn,micOn])
+  }, [videoOn])
+
+  useEffect(() => {
+    recieveInfo()
+  }, [micOn])
 
 
   const handleClick = (item)=>{
     switch(item){
       case 'v' :  if(videoOn){
                     setVideoOn(false)
-                    sendInfo(false,false)
+                    sendInfo({video : false})
                     setVideoIcon(<FiVideo/>)
                   }else{
                     setVideoOn(true)
-                    sendInfo(false,true)
+                    sendInfo({video :true})
                     setVideoIcon(<FiVideoOff/>)
                   }
                   break
       case 'm'  : if(micOn){
                     setMicOn(false)
-                    sendInfo(false,false)
+                    sendInfo({mic:false})
                     setMicIcon(<FiMic/>)
                   }else{
                     setMicOn(true)
-                    sendInfo(true,false)
+                    sendInfo({mic:true})
                     setMicIcon(<FiMicOff/>)
                   }
                   break

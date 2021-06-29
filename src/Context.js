@@ -133,15 +133,14 @@ const ContextProvider = ({ children }) => {
     })
   }
   
-  const sendInfo = (mic,video)=>{
-    isCallReciever ? (socket.emit('send-info',mic,video,call.from)) : (socket.emit('send-info',mic,video,recieverId))
+  const sendInfo = (obj)=>{
+    isCallReciever ? (socket.emit('send-info',obj.mic,obj.video,call.from)) : (socket.emit('send-info',obj.mic,obj.video,recieverId))
   }
 
   const recieveInfo = ()=>{
     socket.on('recieve-info',(mic,video) =>{
       setUserMicOn(mic)
       setUserVideoOn(video)
-      console.log('recive-info '+mic+' '+video);
     })
   }
 

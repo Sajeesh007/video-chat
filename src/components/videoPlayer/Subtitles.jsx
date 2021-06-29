@@ -17,6 +17,11 @@ export default function Subtitles() {
     SpeechRecognition.startListening({ continuous: true})
     recieveMessage()
   }, []);
+
+  useEffect(()=>{
+    sendMessage(transcript)
+  }, [transcript]); 
+
   const handleChange = ()=>{
     sendMessage(transcript)
     recieveMessage()
