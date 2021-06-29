@@ -39,8 +39,8 @@ const ContextProvider = ({ children }) => {
   const [userVideoOn, setUserVideoOn] = useState(false)
   const [userMicOn, setUserMicOn] = useState(false)
   const [userSigned,setUserSigned] = useState('')
+  const [callReciever, setCallReciever] = useState('')
   
-
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
@@ -73,13 +73,10 @@ const ContextProvider = ({ children }) => {
       socket.emit('answerCall', { signal: data, to: call.from });
     });
 
-    try{
-      peer.on('stream', (currentStream) => {
+    peer.on('stream', (currentStream) => {
       userVideo.current.srcObject = currentStream;
-    })}
-    catch(err){
-      console.log(err);
-    }
+    })
+    
 
     peer.signal(call.signal);
 
@@ -92,7 +89,7 @@ const ContextProvider = ({ children }) => {
     peer.on('signal', (data) => {
       socket.emit('callUser', { userToCall: recieverId, signalData: data, from: me, name });
     });
-
+    
     peer.on('stream', (currentStream) => {
       userVideo.current.srcObject = currentStream;
     });
@@ -172,7 +169,9 @@ const ContextProvider = ({ children }) => {
           recieveMessage,
           sendInfo,
           recieveInfo,
-          setCallAccepted
+          setCallAccepted,
+          setCallReciever,
+          callReciever,
         }}
         >
           {children}

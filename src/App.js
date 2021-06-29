@@ -8,6 +8,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import {ProfileInfo, Skelton} from './components/videoPlayer/Skelton';
 
 const App = () => {
   return (
@@ -25,6 +26,12 @@ const App = () => {
             </Route>
             <Route path="/signup">
               <Home isSignup/>
+            </Route>
+            <Route path="/skelton">
+              <div>
+              <Skelton/>
+              <ProfileInfo/>
+              </div> 
             </Route>
         </Switch> 
       </Router>

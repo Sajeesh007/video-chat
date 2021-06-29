@@ -3,13 +3,10 @@ import { SocketContext,useAuth } from '../../Context';
 import Subtitles from './Subtitles';
 import MyVideo from './MyVideo'
 import './Video.css'
+import {ProfileInfo, Skelton} from './Skelton';
 
 export default function UserVideo({width,height}) {
-  const {userVideo,userMicOn,call,userVideoOn,myVideo} = useContext(SocketContext);
-
-
-  {console.log('video'+userVideoOn)}
-
+  const {userVideo,userMicOn,call,userVideoOn,myVideo,name} = useContext(SocketContext);
 
   return (
     <div className='user-video-container'>
@@ -17,21 +14,22 @@ export default function UserVideo({width,height}) {
         <video ref={myVideo} playsInline muted autoPlay />
       </div> */}
 
-      <div className="profile-info">
+      {/* <div className="profile-info">
           <img src={`https://ui-avatars.com/api/?name=${call.name}&background=0add8c&color=ffffff`} alt="img" />
           <h2>{call.name}</h2>
-      </div>
-      {(userVideoOn) && (
-      <div className="skelton">
-        <img src={`https://ui-avatars.com/api/?name=${call.name}&background=0add8c&color=ffffff`} alt="img" />
-      </div> )}
-       
+      </div> */}
+      
       <video className={userVideoOn ? 'user-video-hide' : 'user-video'} playsInline muted={userMicOn} ref={userVideo} autoPlay width={`${width}%`} height={`${height}%`}
         style={{  
           width:`${width}%`,
           height:`${height}%`,
         }}
         /> 
+        {(userVideoOn) && (
+        <div style={{position:'absolute'}}>
+        <Skelton/>
+        </div>
+      )}
         <Subtitles/>
     </div> 
     )

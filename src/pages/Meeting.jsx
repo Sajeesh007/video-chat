@@ -1,29 +1,46 @@
-import { useContext } from "react"
+import { useContext,useState,useEffect } from "react"
 import Menu from "../components/videoPlayer/Menu"
 import MyVideo from "../components/videoPlayer/MyVideo"
 import UserVideo from "../components/videoPlayer/UserVideo"
 import Canvas from "../components/videoPlayer/Canvas"
 import { SocketContext } from "../Context"
 import './Meeting.css'
+import { useHistory } from "react-router-dom"
+import { ProfileInfo } from "../components/videoPlayer/Skelton"
 
 export default function Meeting() {
 
-  const { callAccepted, call, callEnded } = useContext(SocketContext)
- 
+  const [callStarted, setCallStarted] = useState(false)
+  const [showButton, setShowButton] = useState(false)
 
+  const { callAccepted,callEnded,callReciever } = useContext(SocketContext)
+  const history = useHistory()
+  
+  useEffect(() => {
+    history.push('/meeting')
+  }, [callStarted])
+
+  const handleClick= ()=>{
+    setCallStarted(true)
+  }
+
+  setTimeout(() => {
+    setShowButton(true)
+  }, 7000);
 
   return (
     <div className='meeting-container'>
       <div className="video-wrapper">
-
-      {(call.isReceivingCall && !callAccepted ) ?(
-       <div className="meeting-uservideo">
-         <MyVideo width={100} height={100}/>
-       </div>) : (
-        <div className="meeting-uservideo">
-         <UserVideo width={100} height={100}/> 
-         <Canvas width={100} height={100}/> 
-       </div>) }
+          <div className={callReciever ? "meeting-uservideo"  : callStarted ? "meeting-uservideo" : "meeting-uservideo-hide" }>
+            <ProfileInfo/>
+            <UserVideo width={100} height={100}/> 
+            <Canvas width={100} height={100}/> 
+          </div>
+          {!callReciever && (
+          <div className={callStarted ? "ringing-hide" :"ringing"}>
+            {(callAccepted && showButton)? <p>Call accepted</p> : <p>Ringing...</p> }
+            {(callAccepted && !callReciever && showButton) && (<button className='ringing-button' onClick={handleClick}>Go to Call</button>)}
+          </div>)}
       </div>
       <div className="menu-wrapper">
         <Menu/>
