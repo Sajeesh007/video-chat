@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Video Chat App for deaf people
+
+Note: Only work on desktop view
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
