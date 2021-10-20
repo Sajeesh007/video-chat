@@ -2,7 +2,7 @@
 
 Website Link: https://video-chat-mu.vercel.app/
 
-Note: Only work on desktop view
+Note: Only work on desktop
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
